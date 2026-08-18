@@ -2,7 +2,7 @@
 
 > **An immersive, hand-drawn 3D interactive portfolio experience built with React 19, Three.js, React Three Fiber, and GSAP.**
 
-🌐 **Live Demo:** (https://sketch-portfolio.shajith870.workers.dev/)
+🌐 **Live Demo:** https://portfolioo-xi-lime.vercel.app
 
 ---
 
@@ -41,107 +41,6 @@
 | **Styling** | Sass (SCSS), Modern CSS Custom Properties |
 | **State & Context** | React Context API (`AudioManager`, `PerformanceContext`, `SceneContext`, `AchievementsContext`) |
 | **Icons & Assets** | Lucide React, Custom Hand-Drawn WebP/SVG Textures |
-
----
-
-## ⚙️ Getting Started
-
-### Prerequisites
-
-Ensure you have **Node.js 18+** and **npm** installed on your system.
-
-### 1. Clone the Repository
-
-```bash
-git 
-cd sketch-portfolio
-```
-
-### 2. Install Dependencies
-
-```bash
-npm install
-```
-
-### 3. Start Development Server
-
-```bash
-npm run dev
-```
-
-Open your browser and navigate to `http://localhost:5173`.
-
----
-
-## 📦 Scripts Overview
-
-| Command | Action |
-| :--- | :--- |
-| `npm run dev` | Launch local development server via Vite |
-| `npm run build` | Bundle and optimize production files to `dist/` |
-| `npm run preview` | Serve the local `dist/` production build |
-| `npm run lint` | Run Oxlint for fast code quality checks |
-
----
-
-## ☁️ Deployment Guide (Cloudflare Pages)
-
-Follow these step-by-step instructions to deploy the application on **Cloudflare Pages**.
-
-### Option 1: Automatic Deployment via Git Integration (Recommended)
-
-1. **Push Changes to GitHub**:
-   Ensure all code is committed and pushed to your GitHub repository:
-   ```bash
-   git add .
-   git commit -m "docs: add deployment instructions"
-   git push origin main
-   ```
-
-2. **Connect Repository to Cloudflare Pages**:
-   - Log into the [Cloudflare Dashboard](https://dash.cloudflare.com/).
-   - Navigate to **Workers & Pages** > **Create application** > **Pages** tab.
-   - Click **Connect to Git** and authorize your GitHub account.
-   - Select your repository (`sketch-portfolio`).
-
-3. **Configure Build Settings**:
-   - **Project Name**: `sketch-portfolio`
-   - **Production Branch**: `main`
-   - **Framework Preset**: `Vite`
-   - **Build Command**: `npm run build`
-   - **Build Output Directory**: `dist`
-
-4. **Set Environment Variables**:
-   - Under **Environment variables (advanced)**, add:
-     - `NODE_VERSION` = `20`
-
-5. **Save & Deploy**:
-   - Click **Save and Deploy**. Cloudflare will run the build process and deploy your site.
-   - Any future commits pushed to `main` will automatically trigger automatic deployments.
-
----
-
-### Option 2: Direct Terminal Deployment via Wrangler CLI
-
-If you want to deploy directly from your local terminal:
-
-1. **Authenticate with Cloudflare**:
-   ```bash
-   npx wrangler login
-   ```
-
-2. **Build the Production Bundle**:
-   ```bash
-   npm run build
-   ```
-
-3. **Deploy the `dist/` Directory**:
-   ```bash
-   npx wrangler pages deploy dist --project-name=sketch-portfolio
-   ```
-
-4. **Complete Deployment**:
-   - Wrangler will deploy your `dist/` folder and output the live deployment URL.
 
 ---
 
