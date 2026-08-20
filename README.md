@@ -68,6 +68,110 @@ sketch-portfolio/
 ├── package.json           # Dependencies and build scripts
 └── README.md              # Project documentation
 ```
+🧰 Tech Stack
+Core Framework
+Technology	Role
+React 19	UI component system, state management, routing
+Vite 8	Build tool & dev server (ultra-fast HMR)
+React Router DOM 7	Deep-link URL routing (/about, /gallery, etc.)
+3D Engine (The Heart of it All)
+Technology	Role
+Three.js	Low-level WebGL 3D rendering library
+React Three Fiber (r3f)	React bindings for Three.js — write 3D scenes as JSX components
+@react-three/drei	Helper components for r3f (textures, preloading, cameras, etc.)
+@react-three/postprocessing	Post-processing effects (bloom, vignette, depth of field, etc.)
+Animations
+Technology	Role
+GSAP 3 + @gsap/react	Timeline animations — door open/close, camera fly-throughs, transitions
+Shaders (GPU-Level Effects)
+Technology	Role
+Custom GLSL Shaders	Paint-reveal effect, texture transitions — written directly in WebGL shader language
+Styling
+Technology	Role
+SCSS / Sass	Component-level styles with variables and nesting
+Lucide React	Icon library for UI icons
+Typography
+Technology	Role
+Vara.js	Handwriting SVG animation library for the signature/title text
+Content / CMS (optional, configured off)
+Technology	Role
+Sanity CMS	Headless CMS for managing projects, studio content, awards — currently set to static data mode
+Performance Tooling
+Technology	Role
+r3f-perf	FPS / GPU performance monitor overlay
+oxlint	Fast JavaScript linter (Rust-based)
+🏗️ Architecture Overview
+
+App.jsx
+├── PerformanceProvider       → Detects device tier (LOW/MID/HIGH) for adaptive quality
+├── AchievementsProvider      → Tracks user interactions as "achievements"
+└── AppContent
+    ├── AudioProvider         → Manages ambient audio & interaction sounds
+    ├── SceneProvider         → Global scene state (which room, teleportation, overlays)
+    │
+    ├── <Canvas>              → Full-screen Three.js WebGL canvas
+    │   └── Experience.jsx
+    │       ├── EntranceDoors     → The double doors you click to enter
+    │       ├── EmptyCorridor     → The visible corridor during entrance
+    │       ├── SignSystem        → Directional signs near entrance
+    │       ├── InfiniteCorridorManager → Tiling infinite corridor with doors to rooms
+    │       └── TeleportRoom      → Renders room when teleporting via the map
+    │
+    ├── NavigationUI          → Hamburger menu, mini-map, audio toggle, back button
+    ├── GlobalOverlay         → 2D overlay panels (studio monitor, awards, case studies)
+    ├── PaperTransition       → Page-turn paper animation between rooms
+    ├── ScreenReaderOverlay   → Accessibility layer
+    └── Preloader             → Loading screen shown while 3D shaders compile
+🎮 How the 3D Experience Works
+1. Preloading
+On startup, the app preloads all textures (walls, doors, decorations) into GPU memory using Three.js's TextureLoader before anything renders. This prevents stuttering.
+
+2. Entrance Flow
+User sees an animated preloader
+3D doors appear in front of the camera
+Click → GSAP animates doors swinging open + camera flies through them
+SceneContext.markEntered() flips the state
+3. Infinite Corridor
+The corridor isn't one long mesh — it's a tile system (InfiniteCorridorManager). Corridor segments are created/destroyed as the camera moves forward, giving an illusion of infinite length. The camera moves on scroll (parallax also responds to mouse).
+
+4. Rooms
+4 interactive rooms in src/components/canvas/rooms/:
+
+About — personal info, timeline
+Gallery — project showcases
+Studio — content creation (videos, articles)
+Contact — contact form
+5. Teleportation (Map Navigation)
+Clicking the mini-map teleports you between rooms with a paper transition animation (like a book page turning). The teleport state machine in SceneContext:
+
+'closing' → 'teleporting' → 'opening' → null
+6. Custom Shaders
+The paint-reveal hover effect on project cards uses custom GLSL shaders (RevealMaterial.jsx, PaintRevealMaterial.jsx). When you hover, a second "painted" texture is revealed using a GPU-computed mask.
+
+7. Performance Tiers
+At startup, the app detects device capabilities:
+
+Mobile / weak CPU / low RAM → LOW tier (no shadows, simpler lighting, no hover textures)
+Mid-range → MID tier
+Powerful desktop → HIGH tier (full shadows, postprocessing, all textures)
+📁 Project Structure
+
+src/
+├── components/
+│   ├── canvas/           # All 3D (Three.js / r3f) components
+│   │   ├── corridor/     # Infinite corridor system
+│   │   ├── entrance/     # Entry doors + signs
+│   │   ├── rooms/        # About, Gallery, Studio, Contact rooms
+│   │   ├── shaders/      # Custom GLSL shader materials
+│   │   └── Experience.jsx
+│   ├── dom/              # Preloader, paper transition
+│   └── ui/               # Nav UI, overlay, screen reader
+├── context/              # React Contexts (Scene, Audio, Performance, Achievements)
+├── hooks/                # Custom React hooks (camera, parallax, Sanity data)
+├── config/               # Texture preload lists, constants
+├── styles/               # Global SCSS styles
+├── data/                 # Static data (fallback content)
+└── utils/                # Audio manager, helpers
 
 ---
 
